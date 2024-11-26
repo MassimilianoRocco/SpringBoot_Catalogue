@@ -1,12 +1,12 @@
 package it.test.corsospring.controller;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +18,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import it.test.corsospring.model.Prodotto;
 import it.test.corsospring.repository.ProdottoRepository;
-import jakarta.annotation.PostConstruct;
 
 @Controller
 @RequestMapping("/prodotto")
@@ -27,12 +26,25 @@ public class ProdottoController {
 	@Autowired
 	private ProdottoRepository repo;
 	
+	
+	
+	
+	
 	@GetMapping("/lista")
-	public ModelAndView list() {
+	public ModelAndView list(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size", defaultValue = "15") int size) {
 
 		long totaleProdotti = repo.count();
 		
-		return new ModelAndView("index","listaProdotti", repo.findAll() ).addObject("totaleProdotti", totaleProdotti);
+		Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+		Page<Prodotto> prodottiPage = repo.findAll(pageable);
+		
+		
+	    ModelAndView mav = new ModelAndView("index");
+	    mav.addObject("totaleProdotti", totaleProdotti);
+	    mav.addObject("listaProdotti", prodottiPage.getContent()); // Lista dei prodotti nella pagina corrente
+	    mav.addObject("currentPage", page); // Pagina corrente
+	    mav.addObject("totalPages", prodottiPage.getTotalPages()); // Numero totale di pagine
+	    return mav;
 	}
 	
 	

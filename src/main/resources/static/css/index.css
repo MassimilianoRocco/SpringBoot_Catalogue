@@ -5,11 +5,13 @@
 }
 body{
 	font-family: Arial, sans-serif;
+	background-color: #f5f5f5;
 }
 
 
 h1 {
     color: #007bff;
+    margin-top:1rem;
 }
 
 table {
@@ -30,9 +32,23 @@ th {
 .add_container{
 	display:flex;
 	justify-content: space-around;
+	margin-top:2rem;
 	
 	a{
 		cursor:pointer;
 		text-align:end;
 	}
+}
+
+.pagination{
+	width:10rem;
+	text-decoration: none;
+	color: #EF7032;
+    background-color: #ffe8de;
+    padding: 5px 10px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 5px;
+    display:inline;
 }
